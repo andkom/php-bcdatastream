@@ -1,0 +1,32 @@
+{
+  "name": "andkom/bcdatastream",
+  "description": "A simple stream implementation in PHP for reading/writing binary data in Bitcoin protocol.",
+  "type": "library",
+  "keywords": [
+    "stream",
+    "bitcoin",
+    "binary"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andrei Komarov"
+    }
+  ],
+  "require": {
+    "php": "^7.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "AndKom\\BCDataStream\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AndKom\\BCDataStream\\Tests\\": "tests/"
+    }
+  }
+}
