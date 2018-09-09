@@ -6,7 +6,7 @@ namespace AndKom\BCDataStream;
 
 /**
  * Class Reader
- * @package AndKom\Reader
+ * @package AndKom\BCDataStream
  */
 class Reader
 {
