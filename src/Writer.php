@@ -87,33 +87,54 @@ class Writer
 
     /**
      * @param string $format
-     * @param int $num
+     * @param int $int
      * @return Writer
      */
-    public function writeInt(string $format, int $num): self
+    public function writeInt(string $format, int $int): self
     {
-        $bytes = pack($format, $num);
+        $bytes = pack($format, $int);
         $bytes = ByteOrder::convert($bytes, $this->byteOrder);
 
         return $this->write($bytes);
     }
 
     /**
-     * @param int $size
+     * @param int $int
      * @return Writer
      */
-    public function writeVarInt(int $size): self
+    public function writeVarInt(int $int): self
     {
-        if ($size < 0) {
+        $len = 0;
+        $bytes = '';
+
+        while (true) {
+            $bytes .= chr(($int & 0x7f) | ($len ? 0x80 : 0x00));
+            if ($int <= 0x7f) {
+                break;
+            }
+            $int = ($int >> 7) - 1;
+            $len++;
+        }
+
+        return $this->write(strrev($bytes));
+    }
+
+    /**
+     * @param int $int
+     * @return Writer
+     */
+    public function writeCompactSize(int $int): self
+    {
+        if ($int < 0) {
             throw new \InvalidArgumentException('Size is zero.');
-        } elseif ($size < 253) {
-            return $this->write(chr($size));
-        } elseif ($size < 2 ** 16) {
-            return $this->write("\xfd")->writeInt('S', $size);
-        } elseif ($size < 2 ** 32) {
-            return $this->write("\xfe")->writeInt('L', $size);
-        } elseif ($size < 2 ** 64) {
-            return $this->write("\xff")->writeInt('Q', $size);
+        } elseif ($int < 253) {
+            return $this->write(chr($int));
+        } elseif ($int < 2 ** 16) {
+            return $this->write("\xfd")->writeInt('S', $int);
+        } elseif ($int < 2 ** 32) {
+            return $this->write("\xfe")->writeInt('L', $int);
+        } elseif ($int < 2 ** 64) {
+            return $this->write("\xff")->writeInt('Q', $int);
         }
         return $this;
     }
@@ -124,7 +145,7 @@ class Writer
      */
     public function writeString(string $string): self
     {
-        return $this->writeVarInt(strlen($string))->write($string);
+        return $this->writeCompactSize(strlen($string))->write($string);
     }
 
     /**

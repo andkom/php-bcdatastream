@@ -165,6 +165,27 @@ class Reader
      */
     public function readVarInt(): int
     {
+        $int = 0;
+
+        while (true) {
+            $data = ord($this->read(1));
+            $int = ($int << 7) | ($data & 0x7F);
+
+            if ($data & 0x80) {
+                $int++;
+            } else {
+                break;
+            }
+        }
+
+        return $int;
+    }
+
+    /**
+     * @return int
+     */
+    public function readCompactSize(): int
+    {
         $size = ord($this->read(1));
 
         if ($size == 253) {
@@ -183,7 +204,7 @@ class Reader
      */
     public function readString(): string
     {
-        return $this->read($this->readVarInt());
+        return $this->read($this->readCompactSize());
     }
 
     /**
