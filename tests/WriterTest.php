@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AndKom\PhpBitcoinWallet\Tests;
+namespace AndKom\BCDataStream\Tests;
 
 use AndKom\BCDataStream\ByteOrder;
 use AndKom\BCDataStream\Writer;

@@ -1,5 +1,5 @@
 {
-  "name": "andkom/bcdatastream",
+  "name": "andkom/php-bcdatastream",
   "description": "A simple stream implementation in PHP for reading/writing binary data in Bitcoin protocol.",
   "type": "library",
   "keywords": [
